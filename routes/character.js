@@ -25,7 +25,7 @@ router.get("/character/:characterId", async (req, res) => {
       `${process.env.MARVEL_URI}/character/${characterId}?apiKey=${process.env.API_KEY_MARVEL}`
     );
 
-    return res.status(201).json({ message: response.data });
+    return res.status(201).json(response.data);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
