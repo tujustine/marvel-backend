@@ -6,8 +6,21 @@ const router = express.Router();
 // affichage des comics
 router.get("/comics", async (req, res) => {
   try {
+    let limit = 100;
+    let filters = "";
+
+    if (req.query.title) {
+      filters += `&title=${req.query.title}`;
+    }
+    if (req.query.limit) {
+      limit = req.query.limit;
+    }
+    if (req.query.page) {
+      filters += `&skip=${(req.query.page - 1) * limit}`;
+    }
+
     const response = await axios.get(
-      `${process.env.MARVEL_URI}/comics?apiKey=${process.env.API_KEY_MARVEL}`
+      `${process.env.MARVEL_URI}/comics?apiKey=${process.env.API_KEY_MARVEL}${filters}&limit=${limit}`
     );
 
     return res.status(201).json(response.data);
