@@ -41,9 +41,11 @@ router.get("/favorite", isAuthenticated, async (req, res) => {
   try {
     const userId = req.user.id;
     const userFavorites = await Favorite.find({ user: userId });
+    const count = await userFavorites.countDocuments(userId);
+    const result = { count: count, favorites: userFavorites };
 
     if (userFavorites.length > 0) {
-      return res.status(200).json({ favorites: userFavorites });
+      return res.status(200).json(result);
     } else {
       return res.status(404).json({ message: "No favorite for this user" });
     }
