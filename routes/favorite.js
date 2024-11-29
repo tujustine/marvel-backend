@@ -1,24 +1,21 @@
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const express = require("express");
 const Favorite = require("../models/Favorite");
-require("dotenv").config();
 const router = express.Router();
 
 // ajouter ou supprimer des favoris
 router.post("/favorite", isAuthenticated, async (req, res) => {
   try {
-    console.log(req.body);
-
     const userId = req.user.id;
     const { comicOrCharacter, type } = req.body;
 
     const existingFavorite = await Favorite.findOne({
       user: userId,
-      "comicOrCharacter._id": comicOrCharacter._id,
+      comicOrCharacter: comicOrCharacter,
     });
 
     // Si le favori n'existe pas, on le crée
-    if (!existingFavorite) {
+    if (existingFavorite === null) {
       const newFavorite = new Favorite({
         user: userId,
         comicOrCharacter: comicOrCharacter,
@@ -34,6 +31,7 @@ router.post("/favorite", isAuthenticated, async (req, res) => {
       return res.status(200).json({ message: "favorite deleted" });
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ error: error.message });
   }
 });
