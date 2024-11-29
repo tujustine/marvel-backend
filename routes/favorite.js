@@ -7,6 +7,8 @@ const router = express.Router();
 // ajouter ou supprimer des favoris
 router.post("/favorite", isAuthenticated, async (req, res) => {
   try {
+    console.log(req.body);
+
     const userId = req.user.id;
     const { comicOrCharacter, type } = req.body;
 
