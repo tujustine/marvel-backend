@@ -41,7 +41,7 @@ router.get("/favorite", isAuthenticated, async (req, res) => {
   try {
     const userId = req.user.id;
     const userFavorites = await Favorite.find({ user: userId });
-    const count = await userFavorites.countDocuments(userId);
+    const count = await Favorite.countDocuments({ user: userId });
     const result = { count: count, favorites: userFavorites };
 
     if (userFavorites.length > 0) {
